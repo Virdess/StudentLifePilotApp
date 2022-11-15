@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Главная"
+        android:id="@+id/mainPageNavButton"
+        android:icon="@drawable/ic_home_black_24dp"/>
+    <item android:title="Расписание"
+        android:id="@+id/timetableNavButton"
+        android:icon="@drawable/notebook"/>
+    <item android:title="QR"
+        android:id="@+id/qrNavButton"
+        android:icon="@drawable/qr"/>
+    <item android:title="Сообщения"
+        android:id="@+id/messagesNavButton"
+        android:icon="@drawable/messags"/>
+    <item android:title="Профиль"
+        android:id="@+id/profileNavButton"
+        android:icon="@drawable/user_empty"/>
+</menu>

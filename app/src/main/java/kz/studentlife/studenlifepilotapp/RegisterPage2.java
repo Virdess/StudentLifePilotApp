@@ -23,9 +23,11 @@ import java.io.UnsupportedEncodingException;
 
 import kz.studentlife.studenlifepilotapp.JWT.JWTDecode;
 import kz.studentlife.studenlifepilotapp.JWT.TokenManager;
+import kz.studentlife.studenlifepilotapp.UserHTTP.UserHTTP;
 
 public class RegisterPage2 extends AppCompatActivity {
     public static JSONObject regData = new JSONObject();
+    public static String userID;
 
     Button continueReg2;
     TextView regUsernameInput,regPasswordInput,regPhoneInput,reqMailInput;
@@ -40,16 +42,25 @@ public class RegisterPage2 extends AppCompatActivity {
         reqMailInput = findViewById(R.id.reqMailInput);
         regData = RegisterPage1.regData;
         System.out.println(regData);
+        RegisterPage1 registerPage1 = new RegisterPage1();
 
-        //Получаем логин, пароль. телефон, почту и отправляем их в следующую Activity (RegisterPage3)
+        //Получаем логин, пароль. телефон, почту и отправляем их в следующую Activity (RegisterPage3)для того, чтобы позднее вызвав метод регистрации
+        //поместить в тело запроса, сделано для разгрузки страницы регистрации
         continueReg2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    regData.put("username", regUsernameInput);
-                    regData.put("password", regPasswordInput);
-                    regData.put("phone", regPhoneInput);
-                    regData.put("email", reqMailInput);
+                    regData.put("username", regUsernameInput.getText().toString());
+                    regData.put("password", regPasswordInput.getText().toString());
+                    regData.put("phone", regPhoneInput.getText().toString());
+                    regData.put("email", reqMailInput.getText().toString());
+                    regData.put("role", "ROLE_STUDENT");
+                    UserHTTP userHTTP = new UserHTTP();
+                    userHTTP.CreateUserHTTP(regData, RegisterPage2.this);
+                    registerPage1.finish();
+                    userHTTP.GetUserIDHTTP(regData.getString("username"), RegisterPage2.this);
+//                    userID = userHTTP.userid;
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

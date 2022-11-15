@@ -1,4 +1,4 @@
-package kz.studentlife.studenlifepilotapp.SignupHTTP;
+package kz.studentlife.studenlifepilotapp.UserHTTP;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -18,10 +19,10 @@ import java.io.UnsupportedEncodingException;
 
 import kz.studentlife.studenlifepilotapp.JWT.JWTDecode;
 import kz.studentlife.studenlifepilotapp.JWT.TokenManager;
-import kz.studentlife.studenlifepilotapp.RegisterPage3;
 
-public class HTTPLoginPost {
+public class UserHTTP {
     public String tokenToProvide;
+    public  String userid;
     public void sendJsonPostRequest(Context MainActivity, String domain, String login, String password){
 
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity);
@@ -91,12 +92,38 @@ public class HTTPLoginPost {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Попытка входа не удалась: что-то пошло не так..." + error, Toast.LENGTH_LONG).show();
-
+//                Toast.makeText(context, "Попытка регистрации не удалась: что-то пошло не так..." + error, Toast.LENGTH_LONG).show();
+//
+//                System.out.println("Попытка регистрации не удалась: что-то пошло не так..." + error);
 
             }
         });
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public void GetUserIDHTTP(String username, Context context){
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/user/" + username,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject getID = new JSONObject(response);
+                            userid = getID.getString("id");
+                            System.out.println(userid + "____USER DATA");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse (VolleyError error){
+                System.out.println(error);
+            }
+        });
+
+        queue.add(groupGet);
     }
 
 }

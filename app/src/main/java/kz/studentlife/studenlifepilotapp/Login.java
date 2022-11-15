@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import kz.studentlife.studenlifepilotapp.SignupHTTP.HTTPLoginPost;
+import kz.studentlife.studenlifepilotapp.UserHTTP.UserHTTP;
 
 public class Login extends AppCompatActivity {
     Button startRegister, loginButton;
-    HTTPLoginPost httpLoginPost = new HTTPLoginPost();
+    UserHTTP userHttp = new UserHTTP();
     TextView loginInput, passwordInput;
 
     @Override
@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                httpLoginPost.sendJsonPostRequest(Login.this, "/login", loginInput.getText().toString(), passwordInput.getText().toString());
+                userHttp.sendJsonPostRequest(Login.this, "/login", loginInput.getText().toString(), passwordInput.getText().toString());
                 System.out.println(loginInput.getText().toString() + passwordInput.getText().toString());
             }
         });

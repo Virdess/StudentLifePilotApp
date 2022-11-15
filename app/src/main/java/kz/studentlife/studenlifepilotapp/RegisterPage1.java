@@ -28,7 +28,8 @@ public class RegisterPage1 extends AppCompatActivity {
 
 
 
-        //Получаем имя, фамилию, отчество и отправляем их в следующую Activity
+        //Получаем имя, фамилию, отчество и отправляем их в следующую Activity для того, чтобы позднее вызвав метод регистрации
+        //поместить в тело запроса, сделано для разгрузки страницы регистрации
         continueReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -36,6 +37,7 @@ public class RegisterPage1 extends AppCompatActivity {
                     regData.put("firstName", regNameInput.getText().toString());
                     regData.put("midName", regMidNameInput.getText().toString());
                     regData.put("lastName", regLastNameInput.getText().toString());
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="12dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="95sp"
+        android:background="#F8F8F8"
+        >
+
+        <TextView
+            android:id="@+id/lessonName"
+            android:layout_width="132dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="18dp"
+            android:text="LessonName"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/lessonTime"
+            android:layout_width="132dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/lessonName"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="18dp"
+            android:text="LessonTime"
+            android:textColor="#4E4E4E"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+</RelativeLayout>
