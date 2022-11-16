@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent("android.intent.action.Login");
                 startActivity(intent);
                 finish();
+
             }
         }.start();
     }

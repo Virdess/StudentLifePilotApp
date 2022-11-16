@@ -1,12 +1,29 @@
 package kz.studentlife.studenlifepilotapp;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.budiyev.android.codescanner.CodeScanner;
+import com.budiyev.android.codescanner.CodeScannerView;
+import com.budiyev.android.codescanner.DecodeCallback;
+import com.budiyev.android.codescanner.ScanMode;
+import com.google.zxing.Result;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +31,19 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class QRFragment extends Fragment {
+    private CodeScanner codeScanner;
+    private CodeScannerView codeScannerView;
+    TextView howQRWorks;
+    String codeData;
+
+
+    private Context mContext;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext=context;
+    }
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,5 +90,61 @@ public class QRFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_q_r, container, false);
+    }
+
+    Activity activity = this.getActivity();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        codeScannerView = view.findViewById(R.id.qrCodeScanner);
+
+        runCodeScan(view);
+
+        int PERMISSION_ALL = 1;
+        String[] PERMISSIONS = {
+                Manifest.permission.CAMERA
+        };
+        if (!hasPermissions(mContext, PERMISSIONS))
+            ;
+
+    }
+    public void runCodeScan(View view){
+        codeScanner = new CodeScanner(mContext, codeScannerView);
+        codeScanner.setAutoFocusEnabled(true);
+        codeScanner.setFormats(CodeScanner.ALL_FORMATS);
+        codeScanner.setScanMode(ScanMode.CONTINUOUS);
+        codeScanner.setDecodeCallback(new DecodeCallback() {
+            @Override
+            public void onDecoded(@NonNull Result result) {
+                activity.runOnUiThread(new Runnable(){
+                    @Override
+                    public void run(){
+
+                        Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        codeScannerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                codeScanner.startPreview();
+                TextView hint = view.findViewById(R.id.hint);
+                hint.setVisibility(View.GONE);
+
+            }
+        });
+    }
+
+
+    public static boolean hasPermissions(Context context, String... permissons){
+        if (context != null && permissons != null){
+            for (String permission : permissons){
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

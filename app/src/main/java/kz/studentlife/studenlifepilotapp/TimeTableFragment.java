@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -62,6 +63,7 @@ public class TimeTableFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    public static String userid;
 
     public TimeTableFragment() {
         // Required empty public constructor
@@ -129,7 +131,6 @@ public class TimeTableFragment extends Fragment {
                         try {
                             byte decodeByte[] = response.getBytes("ISO-8859-1");
 
-                            lessonList.add(new TimeTableModel("", "12:10-13:40"));
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
@@ -153,68 +154,14 @@ public class TimeTableFragment extends Fragment {
 
         try {
             getSub = new JSONObject(jwtDecode.payload).getString("sub");
-            getTimetableHTTP.getTimetableHTTP(getSub, mContext, view);
-            GetLessons(getSub, view);
+            getTimetableHTTP(getSub, mContext, view);
+
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void GetLessons(String username, View view) {
-        lessonList = new ArrayList<>();
-        lessonList.add(new TimeTableModel("Русский", "12:10-13:40"));
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        StringRequest user = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/user/" + username,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            String userID = new JSONObject(response).getString("id");
-                            System.out.println(userID + " ---USERID");
-                            StringRequest timetable = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/group_lesson_get/",
-                                    new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            try {
-                                                byte decodeByte[] = response.getBytes("ISO-8859-1");
-                                                String lessons = new String(decodeByte, StandardCharsets.UTF_8);
-                                                System.out.println(lessons);
-                                                JSONArray getGroupsList = new JSONArray(lessons);
-                                                System.out.println(getGroupsList.optJSONObject(0) + "------GETGROUPSLIST");
-                                                for (int i = 0; getGroupsList.length() > i; i++){
-                                                    System.out.println(getGroupsList.optJSONObject(i) + "_____GETGROUPSLISTOBJ");
-                                                    lessonList.add(new TimeTableModel(getGroupsList.optJSONObject(i).getString("timetableID"), "12:10-13:40"));
-                                                }
-                                                initRecyclerView(view);
-                                            } catch (UnsupportedEncodingException e) {
-                                                e.printStackTrace();
-                                            }catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }, new Response.ErrorListener(){
-                                @Override
-                                public void onErrorResponse (VolleyError error){
-                                    System.out.println(error);
-                                }
-                            });
-
-                            queue.add(timetable);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse (VolleyError error){
-                System.out.println(error);
-            }
-        });
-
-        queue.add(user);
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     public void initRecyclerView(View view) {
@@ -225,5 +172,188 @@ public class TimeTableFragment extends Fragment {
         adapter = new TimeTableAdapter(lessonList);
         recyclerview.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+
+
+    public void getTimetableHTTP(String username, Context context, View view){
+        lessonList = new ArrayList<>();
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/user/" + username,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject getID = new JSONObject(response);
+                            userid = getID.getString("id");
+                            System.out.println(userid + "____USER ID TIMETABLE");
+                            StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/user_groups_get/",
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            System.out.println(response + "____GROUPS TIMETABLE");
+                                            try {
+                                                String temp = "";
+                                                JSONArray groupsList = new JSONArray(response);
+                                                for (int i = 0; groupsList.length() > i; i++){
+                                                    System.out.println(groupsList.optJSONObject(i) + "" + i);
+                                                    if (groupsList.optJSONObject(i).getString("userID").equals(userid)){
+                                                        System.out.println(groupsList.optJSONObject(i) + "______GOT GROUPSTUDENTID!!!");
+                                                        temp = groupsList.optJSONObject(i).getString("groupStudentID");
+                                                    }
+                                                }
+                                                System.out.println(temp + "____TEMP");
+                                                StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/user_groups_get/",
+                                                        new Response.Listener<String>() {
+                                                            @Override
+                                                            public void onResponse(String response) {
+                                                                System.out.println(response + "____GROUPS TIMETABLE");
+                                                                try {
+                                                                    String temp = "";
+                                                                    JSONArray groupsList = new JSONArray(response);
+                                                                    for (int i = 0; groupsList.length() > i; i++){
+                                                                        System.out.println(groupsList.optJSONObject(i) + "" + i);
+                                                                        if (groupsList.optJSONObject(i).getString("userID").equals(userid)){
+                                                                            System.out.println(groupsList.optJSONObject(i) + "______GOT GROUPSTUDENTID!!!");
+                                                                            temp = groupsList.optJSONObject(i).getString("groupStudentID");
+                                                                        }
+                                                                    }
+                                                                    System.out.println(temp + "____TEMP");
+
+
+                                                                    String finalTemp = temp;
+                                                                    StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/group_lesson_get",
+                                                                            new Response.Listener<String>() {
+                                                                                @Override
+                                                                                public void onResponse(String response) {
+
+                                                                                    try {
+                                                                                        String groupID = "";
+                                                                                        JSONArray timetableList = new JSONArray(response);
+                                                                                        for (int i = 0; timetableList.length() > i; i++){
+                                                                                            System.out.println(timetableList.optJSONObject(i));
+                                                                                            if (timetableList.optJSONObject(i).getString("groupID").equals(finalTemp)){
+                                                                                                System.out.println("GOT GROUPID!!!!!!!!!!!!" + timetableList.optJSONObject(i));
+                                                                                                groupID = timetableList.optJSONObject(i).getString("timetableID");
+                                                                                                String finalGroupID = groupID;
+                                                                                                StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/timetable/" + groupID,
+                                                                                                        new Response.Listener<String>() {
+                                                                                                            @Override
+                                                                                                            public void onResponse(String response) {
+                                                                                                                System.out.println(response + "____TIMETABLE TIMETABLE");
+
+                                                                                                                try {
+                                                                                                                    JSONObject timetableList = new JSONObject(response);
+                                                                                                                    System.out.println(timetableList);
+
+                                                                                                                    StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/lesson/" + timetableList.getString("lesson"),
+                                                                                                                            new Response.Listener<String>() {
+                                                                                                                                @Override
+                                                                                                                                public void onResponse(String response) {
+                                                                                                                                    try {
+                                                                                                                                        JSONObject resp = new JSONObject(response);
+                                                                                                                                        byte decodeByte[] = resp.getString("lessonName").getBytes("ISO-8859-1");
+                                                                                                                                        String lesson = new String(decodeByte, "UTF-8");
+                                                                                                                                        System.out.println(lesson + "____TIMETABLE LESSON");
+                                                                                                                                        String timeStart = timetableList.getString("timeStart");
+                                                                                                                                        String timeEnd = timetableList.getString("timeEnd");
+                                                                                                                                        String day = timetableList.getString("day");
+                                                                                                                                        String lessonName = lesson;
+                                                                                                                                        lessonList.add(new TimeTableModel(lessonName, timeStart + " - " + timeEnd));
+                                                                                                                                        ProgressBar progressBar2 = view.findViewById(R.id.progressBar2);
+                                                                                                                                        progressBar2.setVisibility(View.GONE);
+                                                                                                                                        initRecyclerView(view);
+                                                                                                                                    } catch (UnsupportedEncodingException e) {
+                                                                                                                                        e.printStackTrace();
+                                                                                                                                    } catch (JSONException e) {
+                                                                                                                                        e.printStackTrace();
+                                                                                                                                    }
+
+                                                                                                                                }
+                                                                                                                            }, new Response.ErrorListener(){
+                                                                                                                        @Override
+                                                                                                                        public void onErrorResponse (VolleyError error){
+                                                                                                                            System.out.println(error);
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                                    queue.add(groupGet);
+                                                                                                                } catch (JSONException e) {
+                                                                                                                    e.printStackTrace();
+                                                                                                                }
+
+
+                                                                                                            }
+                                                                                                        }, new Response.ErrorListener(){
+                                                                                                    @Override
+                                                                                                    public void onErrorResponse (VolleyError error){
+                                                                                                        System.out.println(error);
+                                                                                                    }
+                                                                                                });
+                                                                                                queue.add(groupGet);
+                                                                                            }
+                                                                                        }
+
+
+
+
+
+                                                                                    } catch (JSONException e) {
+                                                                                        e.printStackTrace();
+                                                                                    }
+
+
+                                                                                }
+                                                                            }, new Response.ErrorListener(){
+                                                                        @Override
+                                                                        public void onErrorResponse (VolleyError error){
+                                                                            System.out.println(error);
+                                                                        }
+                                                                    });
+
+                                                                    queue.add(groupGet);
+
+
+
+
+
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+
+                                                            }
+                                                        }, new Response.ErrorListener(){
+                                                    @Override
+                                                    public void onErrorResponse (VolleyError error){
+                                                        System.out.println(error);
+                                                    }
+                                                });
+
+                                                queue.add(groupGet);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+                                    }, new Response.ErrorListener(){
+                                @Override
+                                public void onErrorResponse (VolleyError error){
+                                    System.out.println(error);
+                                }
+                            });
+
+                            queue.add(groupGet);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse (VolleyError error){
+                System.out.println(error);
+            }
+        });
+
+        queue.add(groupGet);
     }
 }
