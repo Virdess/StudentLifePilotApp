@@ -41,7 +41,6 @@ public class RegisterPage2 extends AppCompatActivity {
         regPhoneInput = findViewById(R.id.regPhoneInput);
         reqMailInput = findViewById(R.id.reqMailInput);
         regData = RegisterPage1.regData;
-        System.out.println(regData);
         RegisterPage1 registerPage1 = new RegisterPage1();
 
         //Получаем логин, пароль. телефон, почту и отправляем их в следующую Activity (RegisterPage3)для того, чтобы позднее вызвав метод регистрации

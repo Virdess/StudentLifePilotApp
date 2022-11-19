@@ -36,6 +36,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -54,7 +56,6 @@ import java.util.Locale;
  * create an instance of this fragment.
  */
 public class TimeTableFragment extends Fragment {
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -186,39 +187,30 @@ public class TimeTableFragment extends Fragment {
                         try {
                             JSONObject getID = new JSONObject(response);
                             userid = getID.getString("id");
-                            System.out.println(userid + "____USER ID TIMETABLE");
                             StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/user_groups_get/",
                                     new Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String response) {
-                                            System.out.println(response + "____GROUPS TIMETABLE");
                                             try {
                                                 String temp = "";
                                                 JSONArray groupsList = new JSONArray(response);
                                                 for (int i = 0; groupsList.length() > i; i++){
-                                                    System.out.println(groupsList.optJSONObject(i) + "" + i);
                                                     if (groupsList.optJSONObject(i).getString("userID").equals(userid)){
-                                                        System.out.println(groupsList.optJSONObject(i) + "______GOT GROUPSTUDENTID!!!");
                                                         temp = groupsList.optJSONObject(i).getString("groupStudentID");
                                                     }
                                                 }
-                                                System.out.println(temp + "____TEMP");
                                                 StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/user_groups_get/",
                                                         new Response.Listener<String>() {
                                                             @Override
                                                             public void onResponse(String response) {
-                                                                System.out.println(response + "____GROUPS TIMETABLE");
                                                                 try {
                                                                     String temp = "";
                                                                     JSONArray groupsList = new JSONArray(response);
                                                                     for (int i = 0; groupsList.length() > i; i++){
-                                                                        System.out.println(groupsList.optJSONObject(i) + "" + i);
                                                                         if (groupsList.optJSONObject(i).getString("userID").equals(userid)){
-                                                                            System.out.println(groupsList.optJSONObject(i) + "______GOT GROUPSTUDENTID!!!");
                                                                             temp = groupsList.optJSONObject(i).getString("groupStudentID");
                                                                         }
                                                                     }
-                                                                    System.out.println(temp + "____TEMP");
 
 
                                                                     String finalTemp = temp;
@@ -231,20 +223,16 @@ public class TimeTableFragment extends Fragment {
                                                                                         String groupID = "";
                                                                                         JSONArray timetableList = new JSONArray(response);
                                                                                         for (int i = 0; timetableList.length() > i; i++){
-                                                                                            System.out.println(timetableList.optJSONObject(i));
                                                                                             if (timetableList.optJSONObject(i).getString("groupID").equals(finalTemp)){
-                                                                                                System.out.println("GOT GROUPID!!!!!!!!!!!!" + timetableList.optJSONObject(i));
                                                                                                 groupID = timetableList.optJSONObject(i).getString("timetableID");
                                                                                                 String finalGroupID = groupID;
                                                                                                 StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/timetable/" + groupID,
                                                                                                         new Response.Listener<String>() {
                                                                                                             @Override
                                                                                                             public void onResponse(String response) {
-                                                                                                                System.out.println(response + "____TIMETABLE TIMETABLE");
 
                                                                                                                 try {
                                                                                                                     JSONObject timetableList = new JSONObject(response);
-                                                                                                                    System.out.println(timetableList);
 
                                                                                                                     StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/lesson/" + timetableList.getString("lesson"),
                                                                                                                             new Response.Listener<String>() {
@@ -254,12 +242,12 @@ public class TimeTableFragment extends Fragment {
                                                                                                                                         JSONObject resp = new JSONObject(response);
                                                                                                                                         byte decodeByte[] = resp.getString("lessonName").getBytes("ISO-8859-1");
                                                                                                                                         String lesson = new String(decodeByte, "UTF-8");
-                                                                                                                                        System.out.println(lesson + "____TIMETABLE LESSON");
                                                                                                                                         String timeStart = timetableList.getString("timeStart");
                                                                                                                                         String timeEnd = timetableList.getString("timeEnd");
                                                                                                                                         String day = timetableList.getString("day");
                                                                                                                                         String lessonName = lesson;
                                                                                                                                         lessonList.add(new TimeTableModel(lessonName, timeStart + " - " + timeEnd));
+                                                                                                                                        System.out.println(lessonList + "______SORTED?");
                                                                                                                                         ProgressBar progressBar2 = view.findViewById(R.id.progressBar2);
                                                                                                                                         progressBar2.setVisibility(View.GONE);
                                                                                                                                         initRecyclerView(view);

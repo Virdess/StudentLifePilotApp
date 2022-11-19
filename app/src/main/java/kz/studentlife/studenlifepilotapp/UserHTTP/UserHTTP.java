@@ -38,7 +38,7 @@ public class UserHTTP {
         JWTDecode jwtDecode = new JWTDecode();
 
         // Enter the correct url for your api service site
-        String url = "http://192.168.1.2:8081/api/v1" + domain;
+        String url = "https://192.168.1.2:8081/api/v1" + domain;
         TokenManager tokenManager = new TokenManager(MainActivity);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object,
                 new Response.Listener<JSONObject>() {
@@ -50,14 +50,11 @@ public class UserHTTP {
                                     tokenManager.CreateLoginSession("username", login);
                                     Intent intent = new Intent("android.intent.action.MainPage");
                                     MainActivity.startActivity(intent);
-                                    System.out.println(response);
                                 } catch (UnsupportedEncodingException e) {
-                                    System.out.println(e + "ENCODED OBJ ERR");
                                     e.printStackTrace();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 } catch (Exception e) {
-                                    System.out.println(e + "ENCODED OBJ SEND ERR");
                                     e.printStackTrace();
                                 }
                     }
@@ -87,15 +84,10 @@ public class UserHTTP {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        System.out.println(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(context, "Попытка регистрации не удалась: что-то пошло не так..." + error, Toast.LENGTH_LONG).show();
-//
-//                System.out.println("Попытка регистрации не удалась: что-то пошло не так..." + error);
-
             }
         });
         requestQueue.add(jsonObjectRequest);
@@ -110,7 +102,6 @@ public class UserHTTP {
                         try {
                             JSONObject getID = new JSONObject(response);
                             userid = getID.getString("id");
-                            System.out.println(userid + "____USER DATA");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -119,7 +110,6 @@ public class UserHTTP {
                 }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse (VolleyError error){
-                System.out.println(error);
             }
         });
 

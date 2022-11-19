@@ -51,7 +51,6 @@ public class RegisterPage3 extends AppCompatActivity {
         userProfCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(RegisterPage2.regData);
                 String groupName = spinner.getSelectedItem().toString();
                 try {
                     userHTTP.GetUserIDHTTP(RegisterPage2.regData.getString("username"), RegisterPage3.this);
@@ -59,7 +58,6 @@ public class RegisterPage3 extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                System.out.println(userid + "----------USERID");
                 CreateUserGroup(groupName);
                 registerPage2.finish();
                 finish();
@@ -112,7 +110,6 @@ public class RegisterPage3 extends AppCompatActivity {
                 }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse (VolleyError error){
-                System.out.println(error);
             }
         });
 
@@ -129,12 +126,10 @@ public class RegisterPage3 extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println(response + "______GROUP");
                         try {
                             JSONObject getGroupID = new JSONObject(response);
                             userGroupObj.put("groupStudentID", getGroupID.getString("id"));
                             userGroupObj.put("userID", userHTTP.userid);
-                            System.out.println(userGroupObj + "_______USERGROUPOBJ");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -143,7 +138,6 @@ public class RegisterPage3 extends AppCompatActivity {
                                 new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
-                                        System.out.println(response);
                                     }
                                 }, new Response.ErrorListener() {
                             @Override

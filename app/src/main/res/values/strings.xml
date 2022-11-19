@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StudentLife</string>
+    <string name="app_name">Student Life</string>
     <string name="title_activity_main_page">MainPage</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

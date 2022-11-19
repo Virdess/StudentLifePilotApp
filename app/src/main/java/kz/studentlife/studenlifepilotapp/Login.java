@@ -36,7 +36,6 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 userHttp.sendJsonPostRequest(Login.this, "/login", loginInput.getText().toString(), passwordInput.getText().toString());
-                System.out.println(loginInput.getText().toString() + passwordInput.getText().toString());
             }
         });
     }

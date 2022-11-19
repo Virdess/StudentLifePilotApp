@@ -97,6 +97,15 @@ public class QRFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         codeScannerView = view.findViewById(R.id.qrCodeScanner);
+        TextView howQrWorks = view.findViewById(R.id.howQRWorks);
+
+        howQrWorks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("android.intent.action.QrSoon");
+                startActivity(intent);
+            }
+        });
 
         runCodeScan(view);
 
