@@ -5,48 +5,39 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Context;
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 
 import kz.studentlife.studenlifepilotapp.databinding.ActivityMainPage2Binding;
+import kz.studentlife.studenlifepilotapp.databinding.ActivityTeacherMainPageBinding;
 
-public class MainPage extends AppCompatActivity {
+public class TeacherMainPage extends AppCompatActivity {
 
-    ActivityMainPage2Binding binding;
+    ActivityTeacherMainPageBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainPage2Binding.inflate(getLayoutInflater());
+        binding = ActivityTeacherMainPageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFrameLayout(new MainFragment());
+        replaceFrameLayout(new TeacherMainFragment());
 
 
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
-                case R.id.mainPageNavButton:
-                    replaceFrameLayout(new MainFragment());
+                case R.id.teacher_main:
+                    replaceFrameLayout(new TeacherMainFragment());
                     break;
-                case R.id.timetableNavButton:
-                    replaceFrameLayout(new TimeTableFragment());
-                    break;
-                case R.id.qrNavButton:
-                    replaceFrameLayout(new QRFragment());
-                    break;
-                case R.id.messagesNavButton:
-                    replaceFrameLayout(new MessagesFragment());
-                    break;
-                case R.id.profileNavButton:
-                    replaceFrameLayout(new ProfileFragment());
+                case R.id.teacher_profile:
+                    replaceFrameLayout(new TeacherProfileFragment());
                     break;
             }
             return true;
         });
     }
+
+
 
     private void replaceFrameLayout(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();

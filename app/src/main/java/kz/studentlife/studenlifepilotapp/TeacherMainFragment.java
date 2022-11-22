@@ -1,36 +1,19 @@
 package kz.studentlife.studenlifepilotapp;
 
-import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import kz.studentlife.studenlifepilotapp.JWT.JWTDecode;
-import kz.studentlife.studenlifepilotapp.UserHTTP.UserHTTP;
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
+ * Use the {@link TeacherMainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
-    UserHTTP userHTTP = new UserHTTP();
-
-    private Context mContext;
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext=context;
-    }
+public class TeacherMainFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,7 +24,7 @@ public class ProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public ProfileFragment() {
+    public TeacherMainFragment() {
         // Required empty public constructor
     }
 
@@ -51,11 +34,11 @@ public class ProfileFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
+     * @return A new instance of fragment TeacherMainFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static TeacherMainFragment newInstance(String param1, String param2) {
+        TeacherMainFragment fragment = new TeacherMainFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -72,23 +55,10 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    JWTDecode jwtDecode = new JWTDecode();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        return inflater.inflate(R.layout.fragment_profile, container, false);
-    }
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        try {
-            String getSub = new JSONObject(jwtDecode.payload).getString("sub");
-            userHTTP.GetProfInfo(getSub ,mContext,view.findViewById(R.id.nameTextView));
-            userHTTP.Call(getSub, mContext, view.findViewById(R.id.groupTextView));
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        return inflater.inflate(R.layout.fragment_teacher_main, container, false);
     }
 }

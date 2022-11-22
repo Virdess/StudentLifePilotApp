@@ -71,7 +71,7 @@ public class RegisterPage3 extends AppCompatActivity {
 
         //Получение списка групп и запись их по именам в выпадающий список
         RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/groups",
+        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/groups",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -122,7 +122,7 @@ public class RegisterPage3 extends AppCompatActivity {
     private void CreateUserGroup(String groupName){
         RequestQueue queue = Volley.newRequestQueue(this);
         JSONObject userGroupObj = new JSONObject();
-        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.2:8081/api/v1/group_get/" + groupName,
+        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/group_get/" + groupName,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -133,7 +133,7 @@ public class RegisterPage3 extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        String url = "http://192.168.1.2:8081/api/v1/user_group_create";
+                        String url = "http://192.168.1.4:8081/api/v1/user_group_create";
                         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, userGroupObj,
                                 new Response.Listener<JSONObject>() {
                                     @Override

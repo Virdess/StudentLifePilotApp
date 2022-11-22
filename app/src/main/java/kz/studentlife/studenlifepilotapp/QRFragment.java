@@ -107,14 +107,17 @@ public class QRFragment extends Fragment {
             }
         });
 
-        runCodeScan(view);
 
         int PERMISSION_ALL = 1;
         String[] PERMISSIONS = {
                 Manifest.permission.CAMERA
         };
-        if (!hasPermissions(mContext, PERMISSIONS))
-            ;
+        if (!hasPermissions(mContext, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this.getActivity(), PERMISSIONS, PERMISSION_ALL);
+        }
+        else {
+            runCodeScan(view);
+        }
 
     }
     public void runCodeScan(View view){
