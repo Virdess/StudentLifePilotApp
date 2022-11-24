@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -28,6 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -117,12 +119,53 @@ public class TimeTableFragment extends Fragment {
     JWTDecode jwtDecode = new JWTDecode();
     GetTimetableHTTP getTimetableHTTP = new GetTimetableHTTP();
 
+    String weekDayName;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Calendar rightNow = Calendar.getInstance();
         TextView dayNow = view.findViewById(R.id.dayNow);
-        System.out.println(rightNow.toString());
+        String dateToday = rightNow.get(Calendar.YEAR) + "." + rightNow.get(Calendar.MONTH) + "." + rightNow.get(Calendar.DAY_OF_MONTH);
+
+        int dayOfWeek = rightNow.get(Calendar.DAY_OF_WEEK);
+        System.out.println(rightNow.toString() + "_______DAYNOW------- " + dayOfWeek);
+        switch (dayOfWeek){
+            case 1:
+                System.out.println("SUN");
+                weekDayName = "SUN";
+                dayNow.setText(dateToday + ", Воскресенье:");
+                break;
+            case 2:
+                System.out.println("MON");
+                weekDayName = "MON";
+                dayNow.setText(dateToday + ", Понедельник:");
+                break;
+            case 3:
+                System.out.println("TUE");
+                weekDayName = "TUE";
+                dayNow.setText(dateToday + ", Вторник:");
+                break;
+            case 4:
+                System.out.println("WED");
+                weekDayName = "WED";
+                dayNow.setText(dateToday + ", Среда:");
+                break;
+            case 5:
+                System.out.println("THU");
+                weekDayName = "THU";
+                dayNow.setText(dateToday + ", Четверг:");
+                break;
+            case 6:
+                System.out.println("FRI");
+                weekDayName = "FRI";
+                dayNow.setText(dateToday + ", Пятница:");
+                break;
+            case 7:
+                System.out.println("SAT");
+                weekDayName = "SAT";
+                dayNow.setText(dateToday + ", Суббота:");
+                break;
+        }
 
         RequestQueue queue = Volley.newRequestQueue(mContext);
         StringRequest timetable = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/lesson/",
@@ -165,7 +208,7 @@ public class TimeTableFragment extends Fragment {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    public void initRecyclerView(View view) {
+    private void initRecyclerView(View view) {
         recyclerview = view.findViewById(R.id.recyclerview);
         linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -240,17 +283,28 @@ public class TimeTableFragment extends Fragment {
                                                                                                                                 public void onResponse(String response) {
                                                                                                                                     try {
                                                                                                                                         JSONObject resp = new JSONObject(response);
-                                                                                                                                        byte decodeByte[] = resp.getString("lessonName").getBytes("ISO-8859-1");
-                                                                                                                                        String lesson = new String(decodeByte, "UTF-8");
-                                                                                                                                        String timeStart = timetableList.getString("timeStart");
-                                                                                                                                        String timeEnd = timetableList.getString("timeEnd");
-                                                                                                                                        String day = timetableList.getString("day");
-                                                                                                                                        String lessonName = lesson;
-                                                                                                                                        lessonList.add(new TimeTableModel(lessonName, timeStart + " - " + timeEnd));
-                                                                                                                                        System.out.println(lessonList + "______SORTED?");
-                                                                                                                                        ProgressBar progressBar2 = view.findViewById(R.id.progressBar2);
-                                                                                                                                        progressBar2.setVisibility(View.GONE);
-                                                                                                                                        initRecyclerView(view);
+                                                                                                                                        if (timetableList.getString("day").equals(weekDayName)){
+                                                                                                                                            byte decodeByte[] = resp.getString("lessonName").getBytes("ISO-8859-1");
+                                                                                                                                            String lesson = new String(decodeByte, "UTF-8");
+                                                                                                                                            String timeStart = timetableList.getString("timeStart");
+                                                                                                                                            String timeEnd = timetableList.getString("timeEnd");
+                                                                                                                                            String day = timetableList.getString("day");
+                                                                                                                                            String lessonName = lesson;
+                                                                                                                                            String splitted = StringUtils.substring(timeStart, 0, timeStart.length() - 3) + " - " + StringUtils.substring(timeEnd, 0, timeEnd.length() - 3);
+                                                                                                                                            lessonList.add(new TimeTableModel(lessonName, splitted));
+                                                                                                                                            ProgressBar progressBar2 = view.findViewById(R.id.progressBar2);
+                                                                                                                                            progressBar2.setVisibility(View.GONE);
+                                                                                                                                            Collections.sort(lessonList, new Comparator<TimeTableModel>() {
+                                                                                                                                                @Override
+                                                                                                                                                public int compare(TimeTableModel o1, TimeTableModel o2) {
+                                                                                                                                                    return o1.getLessonTime().compareToIgnoreCase(o2.getLessonTime());
+                                                                                                                                                }
+                                                                                                                                            });
+
+                                                                                                                                            System.out.println(lessonList + "______SORTED?_____"  + weekDayName);
+                                                                                                                                            initRecyclerView(view);
+                                                                                                                                        }
+
                                                                                                                                     } catch (UnsupportedEncodingException e) {
                                                                                                                                         e.printStackTrace();
                                                                                                                                     } catch (JSONException e) {

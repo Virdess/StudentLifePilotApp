@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +33,7 @@ import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -104,12 +106,48 @@ public class MainFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
-
+    String weekDayName;
     JWTDecode jwtDecode = new JWTDecode();
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ImageView ahivementsBtn = view.findViewById(R.id.ahivementsBtn), aPerformanceBtn = view.findViewById(R.id.aPerformanceBtn);
+
+        Calendar rightNow = Calendar.getInstance();
+        int dayOfWeek = rightNow.get(Calendar.DAY_OF_WEEK);
+        switch (dayOfWeek){
+            case 1:
+                System.out.println("SUN");
+                weekDayName = "SUN";
+                break;
+            case 2:
+                System.out.println("MON");
+                weekDayName = "MON";
+                break;
+            case 3:
+                System.out.println("TUE");
+                weekDayName = "TUE";
+                break;
+            case 4:
+                System.out.println("WED");
+                weekDayName = "WED";
+                break;
+            case 5:
+                System.out.println("THU");
+                weekDayName = "THU";
+                break;
+            case 6:
+                System.out.println("FRI");
+                weekDayName = "FRI";
+                break;
+            case 7:
+                System.out.println("SAT");
+                weekDayName = "SAT";
+                break;
+        }
+
+
+
 
         ahivementsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +179,7 @@ public class MainFragment extends Fragment {
 
 
 
+
     public void getTimetableHTTP(String username, Context context, View view){
         lessonList = new ArrayList<>();
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -151,7 +190,6 @@ public class MainFragment extends Fragment {
                         try {
                             JSONObject getID = new JSONObject(response);
                             userid = getID.getString("id");
-                            JSONArray lessonsPut = new JSONArray();
                             StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/user_groups_get/",
                                     new Response.Listener<String>() {
                                         @Override
@@ -183,7 +221,6 @@ public class MainFragment extends Fragment {
                                                                             new Response.Listener<String>() {
                                                                                 @Override
                                                                                 public void onResponse(String response) {
-                                                                                    JSONObject lessons = new JSONObject();
 
                                                                                     try {
                                                                                         String groupID = "";
@@ -205,24 +242,37 @@ public class MainFragment extends Fragment {
                                                                                                                                 @Override
                                                                                                                                 public void onResponse(String response) {
                                                                                                                                     try {
+
+                                                                                                                                        TextView lessonName = view.findViewById(R.id.lessonName), lessonTime = view.findViewById(R.id.lessonTime);
                                                                                                                                         JSONObject resp = new JSONObject(response);
-                                                                                                                                        JSONObject temporal = new JSONObject();
-                                                                                                                                        byte decodeByte[] = resp.getString("lessonName").getBytes("ISO-8859-1");
-                                                                                                                                        String lesson = new String(decodeByte, "UTF-8");
-                                                                                                                                        String timeStart = timetableList.getString("timeStart");
-                                                                                                                                        String timeEnd = timetableList.getString("timeEnd");
-                                                                                                                                        String day = timetableList.getString("day");
-                                                                                                                                        lessons.put("lessonName",lesson);
-                                                                                                                                        lessons.put("timeStart", timeStart);
-                                                                                                                                        lessons.put("timeEnd", timeEnd);
-                                                                                                                                        lessons.put("day", day);
-                                                                                                                                        lessonsPut.put(lessons.toString());
-                                                                                                                                        System.out.println(lessons + "_____LESSONS  ");
-                                                                                                                                        System.out.println(lessonsPut + "_____LESSONS!!!!");
-                                                                                                                                        sortLessons(lessonsPut);
-                                                                                                                                    } catch (UnsupportedEncodingException e) {
-                                                                                                                                        e.printStackTrace();
+                                                                                                                                        if (timetableList.getString("day").equals(weekDayName)){
+                                                                                                                                            int timestart = Integer.parseInt(StringUtils.substring(timetableList.getString("timeStart"), 0, timetableList.getString("timeStart").length() - 6));
+                                                                                                                                            System.out.println(timestart);
+                                                                                                                                            Calendar rightNow = Calendar.getInstance();
+                                                                                                                                            int timeNow = rightNow.get(Calendar.HOUR_OF_DAY);
+                                                                                                                                            ProgressBar progressBar3 = view.findViewById(R.id.progressBar3);
+                                                                                                                                            progressBar3.setVisibility(View.GONE);
+                                                                                                                                            int newTime = timeNow+1;
+                                                                                                                                            System.out.println(newTime + " ____NEWTIME------" + timeNow);
+                                                                                                                                            if ((timeNow < timestart) && (timestart <= newTime)){
+                                                                                                                                                byte decodeByte[] = resp.getString("lessonName").getBytes("ISO-8859-1");
+                                                                                                                                                String lesson = new String(decodeByte, "UTF-8");
+                                                                                                                                                System.out.println(lesson);
+                                                                                                                                                lessonName.setText(lesson);
+                                                                                                                                                String timeStart = timetableList.getString("timeStart");
+                                                                                                                                                String timeEnd = timetableList.getString("timeEnd");
+                                                                                                                                                String splitted = StringUtils.substring(timeStart, 0, timeStart.length() - 3) + " - " + StringUtils.substring(timeEnd, 0, timeEnd.length() - 3);
+                                                                                                                                                lessonTime.setText(splitted);
+                                                                                                                                            }
+                                                                                                                                            else {
+                                                                                                                                                lessonName.setText("Пар на сегодня больше нет");
+                                                                                                                                                lessonTime.setText("- - - -");
+                                                                                                                                            }
+                                                                                                                                        }
+
                                                                                                                                     } catch (JSONException e) {
+                                                                                                                                        e.printStackTrace();
+                                                                                                                                    } catch (UnsupportedEncodingException e) {
                                                                                                                                         e.printStackTrace();
                                                                                                                                     }
 
@@ -312,52 +362,6 @@ public class MainFragment extends Fragment {
         });
 
         queue.add(groupGet);
-    }
-
-    private void sortLessons(JSONArray jsonArr) {
-
-        try {
-            System.out.println(jsonArr + "____JSONARR");
-            JSONArray sortedJsonArray = new JSONArray();
-
-            List<JSONObject> jsonValues = new ArrayList<JSONObject>();
-            for (int i = 0; i < jsonArr.length(); i++) {
-                //jsonValues.add(jsonArr.getJSONObject(i));
-                System.out.println(jsonArr.getJSONArray(i) + "_______JSONVALUES");
-            }
-            Collections.sort( jsonValues, new Comparator<JSONObject>() {
-                //You can change "Name" with "ID" if you want to sort by ID
-                private static final String KEY_NAME = "Name";
-
-                @Override
-                public int compare(JSONObject a, JSONObject b) {
-                    String valA = new String();
-                    String valB = new String();
-
-                    try {
-                        valA = (String) a.get(KEY_NAME);
-                        valB = (String) b.get(KEY_NAME);
-                    }
-                    catch (JSONException e) {
-                        //do something
-                    }
-
-                    return valA.compareTo(valB);
-                    //if you want to change the sort order, simply use the following:
-                    //return -valA.compareTo(valB);
-                }
-            });
-
-            for (int i = 0; i < jsonArr.length(); i++) {
-                sortedJsonArray.put(jsonValues.get(i));
-            }
-            System.out.println(sortedJsonArray);
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public static String getJSON(String EncodedString) throws UnsupportedEncodingException{
