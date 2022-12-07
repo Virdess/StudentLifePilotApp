@@ -5,7 +5,7 @@
     <item android:title="Главная"
         android:id="@+id/teacher_main"
         android:icon="@drawable/ic_home_black_24dp"/>
-    <item android:title="Профиль"
-        android:id="@+id/teacher_profile"
-        android:icon="@drawable/user_empty"/>
+<!--    <item android:title="Профиль"-->
+<!--        android:id="@+id/teacher_profile"-->
+<!--        android:icon="@drawable/user_empty"/>-->
 </menu>

@@ -2,6 +2,7 @@ package kz.studentlife.studenlifepilotapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -38,7 +40,9 @@ import java.util.List;
 import kz.studentlife.studenlifepilotapp.JWT.JWTDecode;
 import kz.studentlife.studenlifepilotapp.TimeTable.GetTimetableHTTP;
 import kz.studentlife.studenlifepilotapp.TimeTable.TimeTableAdapter;
+import kz.studentlife.studenlifepilotapp.TimeTable.TimeTableAdapterTeacher;
 import kz.studentlife.studenlifepilotapp.TimeTable.TimeTableModel;
+import kz.studentlife.studenlifepilotapp.TimeTable.TimeTableModelTeacher;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -161,6 +165,16 @@ public class TeacherMainFragment extends Fragment {
                 break;
         }
         initData(view);
+
+        FloatingActionButton createLesson = view.findViewById(R.id.createLesson);
+
+        createLesson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("android.intent.action.TeacherLessonCreate");
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -194,14 +208,14 @@ public class TeacherMainFragment extends Fragment {
     public void getTimetableHTTP(String username, Context context, View view){
         lessonList = new ArrayList<>();
         RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/user/" + username,
+        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/user/" + username,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject getID = new JSONObject(response);
                             userid = getID.getString("id");
-                            StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/user_groups_get/",
+                            StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/user_groups_get/",
                                     new Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String response) {
@@ -213,7 +227,7 @@ public class TeacherMainFragment extends Fragment {
                                                         temp = groupsList.optJSONObject(i).getString("groupStudentID");
                                                     }
                                                 }
-                                                StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/user_groups_get/",
+                                                StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/user_groups_get/",
                                                         new Response.Listener<String>() {
                                                             @Override
                                                             public void onResponse(String response) {
@@ -228,7 +242,7 @@ public class TeacherMainFragment extends Fragment {
 
 
                                                                     String finalTemp = temp;
-                                                                    StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/group_lesson_get",
+                                                                    StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/group_lesson_get",
                                                                             new Response.Listener<String>() {
                                                                                 @Override
                                                                                 public void onResponse(String response) {
@@ -240,7 +254,7 @@ public class TeacherMainFragment extends Fragment {
                                                                                             if (timetableList.optJSONObject(i).getString("groupID").equals(finalTemp)){
                                                                                                 groupID = timetableList.optJSONObject(i).getString("timetableID");
                                                                                                 String finalGroupID = groupID;
-                                                                                                StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/timetable/" + groupID,
+                                                                                                StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/timetable/" + groupID,
                                                                                                         new Response.Listener<String>() {
                                                                                                             @Override
                                                                                                             public void onResponse(String response) {
@@ -248,7 +262,7 @@ public class TeacherMainFragment extends Fragment {
                                                                                                                 try {
                                                                                                                     JSONObject timetableList = new JSONObject(response);
 
-                                                                                                                    StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/lesson/" + timetableList.getString("lesson"),
+                                                                                                                    StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/lesson/" + timetableList.getString("lesson"),
                                                                                                                             new Response.Listener<String>() {
                                                                                                                                 @Override
                                                                                                                                 public void onResponse(String response) {

@@ -29,9 +29,9 @@ public class TeacherMainPage extends AppCompatActivity {
                 case R.id.teacher_main:
                     replaceFrameLayout(new TeacherMainFragment());
                     break;
-                case R.id.teacher_profile:
-                    replaceFrameLayout(new TeacherProfileFragment());
-                    break;
+//                case R.id.teacher_profile:
+//                    replaceFrameLayout(new TeacherProfileFragment());
+//                    break;
             }
             return true;
         });

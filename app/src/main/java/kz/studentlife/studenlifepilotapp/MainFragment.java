@@ -183,14 +183,14 @@ public class MainFragment extends Fragment {
     public void getTimetableHTTP(String username, Context context, View view){
         lessonList = new ArrayList<>();
         RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/user/" + username,
+        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/user/" + username,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject getID = new JSONObject(response);
                             userid = getID.getString("id");
-                            StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/user_groups_get/",
+                            StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/user_groups_get/",
                                     new Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String response) {
@@ -202,7 +202,7 @@ public class MainFragment extends Fragment {
                                                         temp = groupsList.optJSONObject(i).getString("groupStudentID");
                                                     }
                                                 }
-                                                StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/user_groups_get/",
+                                                StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/user_groups_get/",
                                                         new Response.Listener<String>() {
                                                             @Override
                                                             public void onResponse(String response) {
@@ -217,7 +217,7 @@ public class MainFragment extends Fragment {
 
 
                                                                     String finalTemp = temp;
-                                                                    StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/group_lesson_get",
+                                                                    StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/group_lesson_get",
                                                                             new Response.Listener<String>() {
                                                                                 @Override
                                                                                 public void onResponse(String response) {
@@ -229,7 +229,7 @@ public class MainFragment extends Fragment {
                                                                                             if (timetableList.optJSONObject(i).getString("groupID").equals(finalTemp)){
                                                                                                 groupID = timetableList.optJSONObject(i).getString("timetableID");
                                                                                                 String finalGroupID = groupID;
-                                                                                                StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/timetable/" + groupID,
+                                                                                                StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/timetable/" + groupID,
                                                                                                         new Response.Listener<String>() {
                                                                                                             @Override
                                                                                                             public void onResponse(String response) {
@@ -237,7 +237,7 @@ public class MainFragment extends Fragment {
                                                                                                                 try {
                                                                                                                     JSONObject timetableList = new JSONObject(response);
 
-                                                                                                                    StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/lesson/" + timetableList.getString("lesson"),
+                                                                                                                    StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/lesson/" + timetableList.getString("lesson"),
                                                                                                                             new Response.Listener<String>() {
                                                                                                                                 @Override
                                                                                                                                 public void onResponse(String response) {

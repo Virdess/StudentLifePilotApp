@@ -41,7 +41,7 @@ public class UserHTTP {
         JWTDecode jwtDecode = new JWTDecode();
 
         // Enter the correct url for your api service site
-        String url = "http://192.168.56.1:8081/api/v1" + domain;
+        String url = "http://188.130.234.67:8081/api/v1" + domain;
         TokenManager tokenManager = new TokenManager(MainActivity);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object,
                 new Response.Listener<JSONObject>() {
@@ -91,7 +91,7 @@ public class UserHTTP {
         JWTDecode jwtDecode = new JWTDecode();
 
         // Enter the correct url for your api service site
-        String url = "http://192.168.1.4:8081/api/v1/signup_prof";
+        String url = "http://188.130.234.67:8081/api/v1/signup_prof";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, regData,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -107,7 +107,7 @@ public class UserHTTP {
 
     public void GetUserIDHTTP(String username, Context context){
         RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://192.168.1.4:8081/api/v1/user/" + username,
+        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/user/" + username,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -131,7 +131,7 @@ public class UserHTTP {
 
     public void GetProfInfo(String username, Context context, TextView userNameView) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        String baseUrl = "http://192.168.1.4:8081/api/v1/";
+        String baseUrl = "http://188.130.234.67:8081/api/v1/";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, baseUrl + "user/" + username,
                 new Response.Listener<String>() {
@@ -188,7 +188,7 @@ public class UserHTTP {
 
     public void Call(String username, Context context, TextView groupView){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String baseUrl = "http://192.168.1.4:8081/api/v1/user/" + username;
+        String baseUrl = "http://188.130.234.67:8081/api/v1/user/" + username;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, baseUrl,
                 new Response.Listener<String>() {
@@ -229,7 +229,7 @@ public class UserHTTP {
 
     public void GetGroup(String userID, Context context, TextView groupView){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String baseUrl = "http://192.168.1.4:8081/api/v1/user_groups_get/";
+        String baseUrl = "http://188.130.234.67:8081/api/v1/user_groups_get/";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, baseUrl,
                 new Response.Listener<String>() {
@@ -263,7 +263,7 @@ public class UserHTTP {
 
     public void GetGroupName(String groupID, Context context, TextView groupText){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String baseUrl = "http://192.168.1.4:8081/api/v1/group_get_id/" + groupID;
+        String baseUrl = "http://188.130.234.67:8081/api/v1/group_get_id/" + groupID;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, baseUrl,
                 new Response.Listener<String>() {
