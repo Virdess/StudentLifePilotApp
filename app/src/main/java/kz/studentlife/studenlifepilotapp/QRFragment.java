@@ -37,6 +37,7 @@ public class QRFragment extends Fragment {
     String codeData;
 
 
+
     private Context mContext;
     @Override
     public void onAttach(Context context) {
@@ -127,11 +128,10 @@ public class QRFragment extends Fragment {
         codeScanner.setScanMode(ScanMode.CONTINUOUS);
         codeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
-            public void onDecoded(@NonNull Result result) {
-                activity.runOnUiThread(new Runnable(){
+            public void onDecoded(@NonNull final Result result) {
+                activity.runOnUiThread(new Runnable() {
                     @Override
-                    public void run(){
-
+                    public void run() {
                         Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
                     }
                 });

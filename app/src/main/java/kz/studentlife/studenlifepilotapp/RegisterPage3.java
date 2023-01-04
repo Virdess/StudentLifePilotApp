@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import kz.studentlife.studenlifepilotapp.Group.GroupHTTP;
 import kz.studentlife.studenlifepilotapp.JWT.JWTDecode;
 import kz.studentlife.studenlifepilotapp.UserHTTP.UserHTTP;
 
@@ -37,6 +38,7 @@ public class RegisterPage3 extends AppCompatActivity {
     TextView userProfCreate;
     UserHTTP userHTTP = new UserHTTP();
     String userid;
+    GroupHTTP groupHTTP = new GroupHTTP();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,54 +68,7 @@ public class RegisterPage3 extends AppCompatActivity {
 
 
 
-
-
-
-        //Получение списка групп и запись их по именам в выпадающий список
-        RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/groups",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            resToGroups = new JSONArray(response);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        //строка, необходимая для перекодировки приходящего response
-                        String spinnr;
-                        if (resToGroups != null) {
-                            for(int i = 0; i < resToGroups.length(); i++){
-                                try {
-
-                                    //Такую перекодировку нужно делать во всех гет и пост запросах
-                                    byte res[] = resToGroups.getJSONObject(i).getString("name").getBytes("ISO-8859-1");
-                                    spinnr = new String(res, "UTF-8");
-                                    //иначе вылезет кракозябра...
-
-                                    list.add(spinnr);
-                                    groups = new String[i];
-                                    list.toArray(groups);
-
-
-                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                    spinner.setAdapter(adapter);
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-                }, new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse (VolleyError error){
-            }
-        });
-
-        queue.add(groupGet);
+        groupHTTP.GroupsInSpinner(spinner, list, adapter, RegisterPage3.this, "groups");
 
 
 

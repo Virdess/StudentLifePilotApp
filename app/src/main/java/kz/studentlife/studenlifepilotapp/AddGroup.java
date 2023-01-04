@@ -3,6 +3,7 @@ package kz.studentlife.studenlifepilotapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import kz.studentlife.studenlifepilotapp.JWT.JWTDecode;
+import kz.studentlife.studenlifepilotapp.TimeTable.Lesson.LessonHTTP;
 
 public class AddGroup extends AppCompatActivity {
     FloatingActionButton turnBackBtnAG;
@@ -33,11 +35,14 @@ public class AddGroup extends AppCompatActivity {
         turnBackBtnAG = findViewById(R.id.turnBackBtnAG);
         groupAddBtn = findViewById(R.id.groupAddBtn);
         groupCodeCreateInput = findViewById(R.id.groupCodeCreateInput);
+        LessonHTTP lessonHTTP = new LessonHTTP();
 
         turnBackBtnAG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+                Intent intent = new Intent("android.intent.action.TeacherLessonCreate");
+                startActivity(intent);
             }
         });
 
@@ -47,7 +52,10 @@ public class AddGroup extends AppCompatActivity {
                 String groupCode = groupCodeCreateInput.getText().toString();
                 System.out.println(groupCode);
                 try {
-                    CreateGroupHTTP(groupCode);
+                    lessonHTTP.CreateForTimetableHTTP(groupCode, "group_create", AddGroup.this);
+                    Intent intent = new Intent("android.intent.action.TeacherLessonCreate");
+                    startActivity(intent);
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -57,27 +65,4 @@ public class AddGroup extends AppCompatActivity {
 
 
 
-    public void CreateGroupHTTP(String group) throws JSONException {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-
-
-        JWTDecode jwtDecode = new JWTDecode();
-        JSONObject groupJSON = new JSONObject();
-        groupJSON.put("name",group);
-
-        // Enter the correct url for your api service site
-        String url = "http://188.130.234.67:8081/api/v1/group_create";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, groupJSON,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
-    }
 }

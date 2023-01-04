@@ -49,6 +49,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
+        android:contentDescription="go-back-btn"
         android:foregroundTint="#FFFFFF"
         android:tint="#FFFFFF"
         app:backgroundTint="#94C8FF"

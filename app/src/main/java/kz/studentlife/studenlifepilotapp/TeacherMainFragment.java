@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -129,7 +130,6 @@ public class TeacherMainFragment extends Fragment {
         try {
             username = new JSONObject(jwtDecode.payload).getString("sub");
             helloTeacher.setText("Здравствуйте, " + username);
-            getTimetableHTTP(username, mContext, view);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -175,6 +175,10 @@ public class TeacherMainFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+
+
+
     }
 
 
@@ -246,7 +250,6 @@ public class TeacherMainFragment extends Fragment {
                                                                             new Response.Listener<String>() {
                                                                                 @Override
                                                                                 public void onResponse(String response) {
-
                                                                                     try {
                                                                                         String groupID = "";
                                                                                         JSONArray timetableList = new JSONArray(response);
@@ -258,14 +261,13 @@ public class TeacherMainFragment extends Fragment {
                                                                                                         new Response.Listener<String>() {
                                                                                                             @Override
                                                                                                             public void onResponse(String response) {
-
                                                                                                                 try {
                                                                                                                     JSONObject timetableList = new JSONObject(response);
-
                                                                                                                     StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/lesson/" + timetableList.getString("lesson"),
                                                                                                                             new Response.Listener<String>() {
                                                                                                                                 @Override
                                                                                                                                 public void onResponse(String response) {
+
                                                                                                                                     try {
                                                                                                                                         JSONObject resp = new JSONObject(response);
                                                                                                                                         if (timetableList.getString("day").equals(weekDayName)){
@@ -283,7 +285,6 @@ public class TeacherMainFragment extends Fragment {
                                                                                                                                                     return o1.getLessonTime().compareToIgnoreCase(o2.getLessonTime());
                                                                                                                                                 }
                                                                                                                                             });
-
                                                                                                                                             System.out.println(lessonList + "______SORTED?_____"  + weekDayName);
                                                                                                                                             initRecyclerView(view);
                                                                                                                                         }
@@ -293,7 +294,6 @@ public class TeacherMainFragment extends Fragment {
                                                                                                                                     } catch (JSONException e) {
                                                                                                                                         e.printStackTrace();
                                                                                                                                     }
-
                                                                                                                                 }
                                                                                                                             }, new Response.ErrorListener(){
                                                                                                                         @Override
@@ -305,8 +305,6 @@ public class TeacherMainFragment extends Fragment {
                                                                                                                 } catch (JSONException e) {
                                                                                                                     e.printStackTrace();
                                                                                                                 }
-
-
                                                                                                             }
                                                                                                         }, new Response.ErrorListener(){
                                                                                                     @Override
@@ -317,16 +315,9 @@ public class TeacherMainFragment extends Fragment {
                                                                                                 queue.add(groupGet);
                                                                                             }
                                                                                         }
-
-
-
-
-
                                                                                     } catch (JSONException e) {
                                                                                         e.printStackTrace();
                                                                                     }
-
-
                                                                                 }
                                                                             }, new Response.ErrorListener(){
                                                                         @Override
@@ -334,17 +325,10 @@ public class TeacherMainFragment extends Fragment {
                                                                             System.out.println(error);
                                                                         }
                                                                     });
-
                                                                     queue.add(groupGet);
-
-
-
-
-
                                                                 } catch (JSONException e) {
                                                                     e.printStackTrace();
                                                                 }
-
                                                             }
                                                         }, new Response.ErrorListener(){
                                                     @Override
@@ -352,12 +336,10 @@ public class TeacherMainFragment extends Fragment {
                                                         System.out.println(error);
                                                     }
                                                 });
-
                                                 queue.add(groupGet);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
-
                                         }
                                     }, new Response.ErrorListener(){
                                 @Override
@@ -365,12 +347,10 @@ public class TeacherMainFragment extends Fragment {
                                     System.out.println(error);
                                 }
                             });
-
                             queue.add(groupGet);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 }, new Response.ErrorListener(){
             @Override
@@ -378,7 +358,6 @@ public class TeacherMainFragment extends Fragment {
                 System.out.println(error);
             }
         });
-
         queue.add(groupGet);
     }
 }

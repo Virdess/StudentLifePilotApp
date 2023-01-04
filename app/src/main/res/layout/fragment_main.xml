@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,38 +10,93 @@
     android:layout_height="match_parent"
     tools:context=".MainFragment">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <!-- TODO: Update blank fragment layout -->
+        <!-- TODO: Update blank fragment layout -->
 
-        <TextView
-            android:id="@+id/userHello"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingTop="32sp"
-            android:text="Здравствуй, username"
-            android:textColor="#000000"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.25"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:translationZ="5dp"
+            tools:layout_editor_absoluteX="203dp"
+            tools:layout_editor_absoluteY="1dp"
+            android:scrollbars="none"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/prodSampleImg1"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    app:srcCompat="@drawable/frame95"
+                    android:contentDescription="product-img"/>
+
+
+                <ImageView
+                    android:id="@+id/prodSampleImg3"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    app:srcCompat="@drawable/frame95"
+                    android:contentDescription="product-img" />
+
+                <com.google.android.gms.ads.AdView
+                    xmlns:ads="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/adView2"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    ads:adSize="BANNER"
+                    ads:adUnitId="ca-app-pub-7347091045645164/2347984283"/>
+
+                <ImageView
+                    android:id="@+id/prodSampleImg2"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    app:srcCompat="@drawable/frame95"
+                    android:contentDescription="product-img" />
+
+                <ImageView
+                    android:id="@+id/prodSampleImg4"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    app:srcCompat="@drawable/frame95"
+                    android:contentDescription="product-img" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
 
         <ImageView
-            android:id="@+id/aPerformanceBtn"
+            android:id="@+id/performanceBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="34dp"
+            android:layout_marginTop="2dp"
             android:alpha="0.6"
             android:clickable="true"
             android:src="@drawable/group_3007"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.65"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userHello" />
+            app:layout_constraintTop_toTopOf="@+id/ahivementsBtn"
+            android:paddingLeft="14.5dp"
+            android:paddingRight="14.5dp"
+            android:paddingTop="7.5dp"
+            android:paddingBottom="7.5dp"
+            android:contentDescription="study-btn"/>
 
         <ImageView
             android:id="@+id/ahivementsBtn"
@@ -53,7 +109,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.35"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userHello" />
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"
+            android:padding="9dp"
+            android:contentDescription="perf-btn"
+            />
 
         <TextView
             android:id="@+id/textView17"
@@ -69,8 +128,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Успеваемость"
-            app:layout_constraintEnd_toEndOf="@+id/aPerformanceBtn"
-            app:layout_constraintStart_toStartOf="@+id/aPerformanceBtn"
+            app:layout_constraintEnd_toEndOf="@+id/performanceBtn"
+            app:layout_constraintStart_toStartOf="@+id/performanceBtn"
             app:layout_constraintTop_toBottomOf="@+id/ahivementsBtn" />
 
         <TextView
@@ -82,8 +141,9 @@
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/userHello"
-            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+            app:layout_constraintStart_toStartOf="@+id/relativeLayout"
+            app:layout_constraintTop_toBottomOf="@+id/textView17"
+            tools:ignore="MissingConstraints" />
 
         <ImageView
             android:id="@+id/imageView11"
@@ -92,9 +152,12 @@
             android:src="@drawable/planet_with_disc_mainpage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
         <RelativeLayout
+            android:id="@+id/relativeLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
 
         </RelativeLayout>
 
@@ -137,7 +200,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true" />
 
         </RelativeLayout>
 

@@ -12,9 +12,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Продолжить ->"
+        android:translationZ="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reqMailInput" />
+        app:layout_constraintTop_toBottomOf="@+id/reqMailInput"
+        android:textSize="14dp" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -39,8 +41,9 @@
     <EditText
         android:id="@+id/regUsernameInput"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="reg-login-input"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,8 +80,9 @@
     <EditText
         android:id="@+id/regPasswordInput"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="reg-password-input"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,8 +92,9 @@
     <EditText
         android:id="@+id/regPhoneInput"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="reg-number-input"
         android:ems="10"
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,8 +113,9 @@
     <EditText
         android:id="@+id/reqMailInput"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="reg-mail-input"
         android:ems="10"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"

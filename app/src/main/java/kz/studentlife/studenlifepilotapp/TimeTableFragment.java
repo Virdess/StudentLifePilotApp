@@ -280,6 +280,7 @@ public class TimeTableFragment extends Fragment {
                                                                                                                             new Response.Listener<String>() {
                                                                                                                                 @Override
                                                                                                                                 public void onResponse(String response) {
+
                                                                                                                                     try {
                                                                                                                                         JSONObject resp = new JSONObject(response);
                                                                                                                                         if (timetableList.getString("day").equals(weekDayName)){
@@ -291,6 +292,7 @@ public class TimeTableFragment extends Fragment {
                                                                                                                                             String lessonName = lesson;
                                                                                                                                             String splitted = StringUtils.substring(timeStart, 0, timeStart.length() - 3) + " - " + StringUtils.substring(timeEnd, 0, timeEnd.length() - 3);
                                                                                                                                             lessonList.add(new TimeTableModel(lessonName, splitted));
+
                                                                                                                                             ProgressBar progressBar2 = view.findViewById(R.id.progressBar2);
                                                                                                                                             progressBar2.setVisibility(View.GONE);
                                                                                                                                             Collections.sort(lessonList, new Comparator<TimeTableModel>() {
@@ -302,6 +304,7 @@ public class TimeTableFragment extends Fragment {
                                                                                                                                             System.out.println(lessonList + "______SORTED?_____"  + weekDayName);
                                                                                                                                             initRecyclerView(view);
                                                                                                                                         }
+
                                                                                                                                     } catch (UnsupportedEncodingException e) {
                                                                                                                                         e.printStackTrace();
                                                                                                                                     } catch (JSONException e) {

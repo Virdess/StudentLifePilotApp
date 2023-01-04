@@ -30,8 +30,9 @@
     <EditText
         android:id="@+id/regNameInput"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="reg-name-input"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,8 +42,9 @@
     <EditText
         android:id="@+id/regMidNameInput"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="reg-surname-input"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,8 +54,9 @@
     <EditText
         android:id="@+id/regLastNameInput"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="reg-lastname-input"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,6 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:text="Продолжить ->"
+        android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/regLastNameInput" />

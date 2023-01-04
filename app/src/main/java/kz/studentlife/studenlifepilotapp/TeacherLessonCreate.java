@@ -30,7 +30,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.studentlife.studenlifepilotapp.Group.GroupHTTP;
 import kz.studentlife.studenlifepilotapp.JWT.JWTDecode;
+import kz.studentlife.studenlifepilotapp.TimeTable.Lesson.LessonHTTP;
+import kz.studentlife.studenlifepilotapp.TimeTable.TimeTableCreateHTTP;
 
 public class TeacherLessonCreate extends AppCompatActivity {
     Spinner spinnerGroup, spinnerLesson, spinnerDay;
@@ -40,6 +43,10 @@ public class TeacherLessonCreate extends AppCompatActivity {
     FloatingActionButton turnBackBtnTLC;
     String groupName;
     String lessonName;
+    String dayToday;
+    GroupHTTP groupHTTP = new GroupHTTP();
+    TimeTableCreateHTTP timeTableCreateHTTP = new TimeTableCreateHTTP();
+    LessonHTTP lessonHTTP = new LessonHTTP();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +68,17 @@ public class TeacherLessonCreate extends AppCompatActivity {
         ArrayAdapter<String> adapterLesson = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lessonArray);
 
         String[] arraySpinnerDay = new String[] {
-                "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"
+                "MON",
+                "TUE",
+                "WED",
+                "THU",
+                "FRI",
+                "SAT",
+                "SUN"
         };
 
-        GroupsInSpinner(spinnerGroup, groupsArray, adapter);
-        LessonsInSpinner(spinnerLesson, lessonArray, adapterLesson);
-
+        groupHTTP.GroupsInSpinner(spinnerGroup, groupsArray, adapter, this, "groups");
+        groupHTTP.GroupsInSpinner(spinnerLesson, lessonArray, adapterLesson, this, "lesson");
 
         inputTimeStart.addTextChangedListener(new TextWatcher() {
             @Override
@@ -110,17 +122,25 @@ public class TeacherLessonCreate extends AppCompatActivity {
             }
         });
 
-
-
-
         lessonCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 groupName = spinnerGroup.getSelectedItem().toString();
                 lessonName = spinnerLesson.getSelectedItem().toString();
+                dayToday = spinnerDay.getSelectedItem().toString();
                 String timeStart = inputTimeStart.getText().toString() + ":00";
                 String timeEnd = inputTimeEnd.getText().toString() + ":00";
-                System.out.println(groupName + "\n" + lessonName+ "\n" + timeStart + "\n" + timeEnd);
+                System.out.println(groupName + "\n" + lessonName+ "\n" + timeStart + "\n" + timeEnd + "\n" + dayToday);
+                JSONObject timetableJSON = new JSONObject();
+
+                try {
+                    timetableJSON.put("timeStart",timeStart);
+                    timetableJSON.put("timeEnd",timeEnd);
+                    timetableJSON.put("day",dayToday);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                lessonHTTP.GetLessonID(lessonName, timetableJSON, TeacherLessonCreate.this, groupName);
             }
         });
 
@@ -136,6 +156,7 @@ public class TeacherLessonCreate extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent("android.intent.action.AddGroup");
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -144,6 +165,7 @@ public class TeacherLessonCreate extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent("android.intent.action.AddLesson");
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -153,112 +175,14 @@ public class TeacherLessonCreate extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, arraySpinnerDay);
         spinnerDayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDay.setAdapter(spinnerDayAdapter);
+
+
+
+
+
+
+
+
     }
-
-
-
-
-    private void CreateTimetable(){
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//
-//
-//
-//        JWTDecode jwtDecode = new JWTDecode();
-//
-//        // Enter the correct url for your api service site
-//        String url = "http://192.168.1.2:8081/api/v1/signup_prof";
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, regData,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//            }
-//        });
-//        requestQueue.add(jsonObjectRequest);
-    }
-
-
-
-
-
-    //Getting items for spinners (Groups, lessons) to create timetable
-    private void GroupsInSpinner(Spinner spinnerGroup, List<String> groupsArray, ArrayAdapter<String> adapter){
-
-        String baseUrl = "http://188.130.234.67:8081/api/v1/groups";
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, baseUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println(response);
-                        try {
-                            JSONArray resp = new JSONArray(response);
-                            for (int i = 0; resp.length() > i; i++){
-                                byte bytes[] = resp.optJSONObject(i).getString("name").getBytes("ISO-8859-1");
-                                String groupsNamesDecoded = new String(bytes, "UTF-8");
-                                System.out.println(groupsNamesDecoded);
-                                groupsArray.add(groupsNamesDecoded);
-                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                spinnerGroup.setAdapter(adapter);
-                            }
-
-                            //resp = new JSONArray(groupsNamesDecoded);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse (VolleyError error){
-                System.out.println(error);
-            }
-        });
-        queue.add(stringRequest);
-    }
-
-    private void LessonsInSpinner(Spinner spinnerGroup, List<String> lessonArray, ArrayAdapter<String> adapterLesson){
-
-        String baseUrl = "http://188.130.234.67:8081/api/v1/lesson";
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, baseUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println(response);
-                        try {
-                            JSONArray resp = new JSONArray(response);
-                            for (int i = 0; resp.length() > i; i++){
-                                byte bytes[] = resp.optJSONObject(i).getString("lessonName").getBytes("ISO-8859-1");
-                                String groupsNamesDecoded = new String(bytes, "UTF-8");
-                                System.out.println(groupsNamesDecoded);
-                                lessonArray.add(groupsNamesDecoded);
-                                adapterLesson.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                spinnerGroup.setAdapter(adapterLesson);
-                            }
-
-                            //resp = new JSONArray(groupsNamesDecoded);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse (VolleyError error){
-                System.out.println(error);
-            }
-        });
-        queue.add(stringRequest);
-    }
-
-
 
 }

@@ -22,6 +22,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -29,15 +32,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import kz.studentlife.studenlifepilotapp.JWT.JWTDecode;
 import kz.studentlife.studenlifepilotapp.TimeTable.TimeTableModel;
@@ -111,7 +109,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ImageView ahivementsBtn = view.findViewById(R.id.ahivementsBtn), aPerformanceBtn = view.findViewById(R.id.aPerformanceBtn);
+        ImageView ahivementsBtn = view.findViewById(R.id.ahivementsBtn), aPerformanceBtn = view.findViewById(R.id.performanceBtn);
 
         Calendar rightNow = Calendar.getInstance();
         int dayOfWeek = rightNow.get(Calendar.DAY_OF_WEEK);
@@ -164,15 +162,21 @@ public class MainFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        userHello = getView().findViewById(R.id.userHello);
         String username;
         try {
             username = new JSONObject(jwtDecode.payload).getString("sub");
-            userHello.setText("Здравствуй, " + username);
             getTimetableHTTP(username, mContext, view);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
+
+        MobileAds.initialize(mContext, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
 
     }
 
@@ -236,7 +240,6 @@ public class MainFragment extends Fragment {
 
                                                                                                                 try {
                                                                                                                     JSONObject timetableList = new JSONObject(response);
-
                                                                                                                     StringRequest groupGet = new StringRequest(Request.Method.GET, "http://188.130.234.67:8081/api/v1/lesson/" + timetableList.getString("lesson"),
                                                                                                                             new Response.Listener<String>() {
                                                                                                                                 @Override
