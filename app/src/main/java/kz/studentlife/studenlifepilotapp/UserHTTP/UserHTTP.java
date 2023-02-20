@@ -32,7 +32,7 @@ public class UserHTTP {
         JSONObject object = new JSONObject();
         try {
 
-            object.put("username", login);
+            object.put("userName", login);
             object.put("password", password);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -41,7 +41,7 @@ public class UserHTTP {
         JWTDecode jwtDecode = new JWTDecode();
 
         // Enter the correct url for your api service site
-        String url = "http://188.130.234.67:8081/api/v1" + domain;
+        String url = "http://188.130.234.67:4444" + domain;
         TokenManager tokenManager = new TokenManager(MainActivity);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object,
                 new Response.Listener<JSONObject>() {
@@ -52,8 +52,8 @@ public class UserHTTP {
                                     tokenToProvide = response.getString("token");
                                     tokenManager.CreateLoginSession("username", login);
                                     JSONObject payload = new JSONObject(jwtDecode.payload);
-                                    System.out.println(payload.getString("role") + "_____ROLE");
-                                    if (payload.getString("role").equals("ROLE_STUDENT")){
+                                    System.out.println(response.optJSONArray("role").getString(0).equals("ROLE_STUDENT") + "_____ROLE");
+                                    if (response.optJSONArray("role").getString(0).equals("ROLE_STUDENT")){
                                         Intent intent = new Intent("android.intent.action.MainPage");
                                         MainActivity.startActivity(intent);
                                     }

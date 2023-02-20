@@ -3,20 +3,20 @@ plugins {
 }
 
 android {
-    signingConfigs {
-        debug {
-            storeFile file('E:\\studentlife\\keystore\\slkeystore.jks')
-            storePassword 'MyAss252181'
-            keyAlias 'slpilotkey'
-            keyPassword 'MyAss252181'
-        }
-        release {
-            storeFile file('E:\\studentlife\\keystore\\slkeystore.jks')
-            storePassword 'MyAss252181'
-            keyAlias 'slpilotkey'
-            keyPassword 'MyAss252181'
-        }
-    }
+//    signingConfigs {
+//        debug {
+//            storeFile file('E:\\studentlife\\keystore\\slkeystore.jks')
+//            storePassword 'MyAss252181'
+//            keyAlias 'slpilotkey'
+//            keyPassword 'MyAss252181'
+//        }
+//        release {
+//            storeFile file('E:\\studentlife\\keystore\\slkeystore.jks')
+//            storePassword 'MyAss252181'
+//            keyAlias 'slpilotkey'
+//            keyPassword 'MyAss252181'
+//        }
+//    }
     namespace 'kz.studentlife.studenlifepilotapp'
     compileSdk 33
 

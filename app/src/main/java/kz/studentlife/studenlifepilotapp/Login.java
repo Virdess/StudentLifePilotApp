@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userHttp.sendJsonPostRequest(Login.this, "/login", loginInput.getText().toString(), passwordInput.getText().toString());
+                userHttp.sendJsonPostRequest(Login.this, "/auth/login", loginInput.getText().toString(), passwordInput.getText().toString());
             }
         });
     }
