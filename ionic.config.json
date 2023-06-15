@@ -1,0 +1,7 @@
+{
+  "name": "study machine",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
